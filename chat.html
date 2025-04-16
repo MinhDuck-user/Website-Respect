@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Diễn đàn Chat</title>
+  <link rel="stylesheet" href="/forums/static/style.css">
+  <style>
+    /* CSS nếu không dùng file style.css */
+    body { font-family: Arial, sans-serif; text-align: center; }
+    #messages { list-style: none; padding: 0; border: 1px solid #ccc; height: 300px; overflow-y: scroll; margin-bottom: 10px; }
+    #chat-form { display: flex; justify-content: center; }
+    #chat-form input { flex: 1; padding: 10px; }
+    #chat-form button { padding: 10px 20px; background-color: #007BFF; color: #fff; border: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>Diễn đàn Chat</h1>
+  <ul id="messages"></ul>
+  <form id="chat-form">
+    <input id="m" autocomplete="off" placeholder="Nhập tin nhắn..." />
+    <button type="submit">Gửi</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    document.getElementById('chat-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('m');
+      if (input.value) {
+        socket.emit('chat message', input.value);
+        input.value = '';
+      }
+    });
+
+    socket.on('chat message', (msg) => {
+      const item = document.createElement('li');
+      item.textContent = msg;
+      document.getElementById('messages').appendChild(item);
+    });
+  </script>
+</body>
+</html>

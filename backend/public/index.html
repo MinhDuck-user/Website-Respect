@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Diễn đàn Chat</title>
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    #messages { list-style: none; padding: 0; }
+    #messages li { margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Chat Forum</h1>
+  <ul id="messages"></ul>
+  <input id="messageInput" autocomplete="off" placeholder="Nhập tin nhắn..." />
+  <button onclick="sendMessage()">Gửi</button>
+
+  <script>
+    const socket = io();
+
+    const input = document.getElementById('messageInput');
+    const messages = document.getElementById('messages');
+
+    socket.on('chat message', function(msg) {
+      const li = document.createElement('li');
+      li.textContent = msg;
+      messages.appendChild(li);
+    });
+
+    function sendMessage() {
+      const msg = input.value;
+      if (msg) {
+        socket.emit('chat message', msg);
+        input.value = '';
+      }
+    }
+  </script>
+</body>
+</html>
