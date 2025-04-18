@@ -12,14 +12,14 @@ const server = http.createServer(app);
 app.use(cors());
 
 // Nếu có file tĩnh (CSS, JS…) đặt trong public/, phục vụ chúng ở root
-app.use(express.static(path.join(__dirname, 'public')));  // :contentReference[oaicite:0]{index=0}
+app.use(express.static(path.join(__dirname, 'backend', 'public')));  // :contentReference[oaicite:0]{index=0}
 
 // Tạo router cho diễn đàn
 const forumRouter = express.Router();
 
 // Route gốc (‘/’) hiển thị giao diện diễn đàn
 forumRouter.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  res.sendFile(path.join(__dirname, 'backend', 'public','index.html'));
 });
 
 // Socket.IO xử lý chat realtime
