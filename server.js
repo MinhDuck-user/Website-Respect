@@ -3,7 +3,7 @@ const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-
+const io = new Server(server);
 const app = express();
 const server = http.createServer(app);
 
@@ -20,13 +20,17 @@ app.get('/health', (req, res) => {
 });
 
 // Socket.IO để chat realtime
-const io = new Server(server, {
-  cors: { origin: '*', methods: ['GET','POST'] }
-});
 io.on('connection', socket => {
-  console.log('User connected', socket.id);
-  socket.on('chat message', msg => io.emit('chat message', msg));
-  socket.on('disconnect', () => console.log('User disconnected', socket.id));
+  console.log('Người dùng kết nối:', socket.id);
+
+  // Khi nhận chat message từ client, broadcast lại
+  socket.on('chat message', ({ user, text }) => {
+    io.emit('chat message', { user, text, time: Date.now() });
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Người dùng ngắt kết nối:', socket.id);
+  });
 });
 
 // Khởi động server
