@@ -4,7 +4,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
 const app = express();
-const server = { Server };
+const server = http.createServer(app);
 const io = new Server(server);
 // 1) Phục vụ tệp tĩnh từ backend/public
 app.use(express.static(path.join(__dirname, 'backend', 'public')));  // :contentReference[oaicite:0]{index=0}
