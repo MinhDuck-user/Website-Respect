@@ -1,0 +1,25 @@
+<!-- public/chat.html -->
+<!DOCTYPE html>
+<html lang="vi, en">    
+<head>
+  <meta charset="UTF-8">
+  <title> Cộng đồng Chia Sẻ</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="chat-container">
+    <header>
+      <h1>Diễn đàn Chia sẻ</h1>
+      <button id="logout">Đăng xuất</button>
+    </header>
+    <ul id="messages"></ul>
+    <form id="chat-form">
+      <input id="m" autocomplete="off" placeholder="Nhập tin nhắn..." required />
+      <button type="submit">Gửi</button>
+    </form>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="client.js"></script>
+</body>
+</html>
