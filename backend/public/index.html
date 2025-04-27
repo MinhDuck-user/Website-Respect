@@ -1,40 +1,35 @@
+<!-- public/index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Diễn đàn Chat</title>
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-  <style>
-    body { font-family: sans-serif; padding: 20px; }
-    #messages { list-style: none; padding: 0; }
-    #messages li { margin-bottom: 10px; }
-  </style>
+  <title>Đăng nhập để vào Cộng đồng Chia Sẻ</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Chat Forum</h1>
-  <ul id="messages"></ul>
-  <input id="messageInput" autocomplete="off" placeholder="Nhập tin nhắn..." />
-  <button onclick="sendMessage()">Gửi</button>
+  <div class="login-container">
+    <h1>Đăng Nhập</h1>
+    <form id="login-form">
+      <input id="username" placeholder="Nhập tên của bạn(Có thể là nickname)" required />
+      <input id="password" placeholder="Nhập mật khẩu" required />
+      <button type="submit">Vào Chat</button>
+    </form>
+  </div>
 
   <script>
-    const socket = io();
-
-    const input = document.getElementById('messageInput');
-    const messages = document.getElementById('messages');
-
-    socket.on('chat message', function(msg) {
-      const li = document.createElement('li');
-      li.textContent = msg;
-      messages.appendChild(li);
-    });
-
-    function sendMessage() {
-      const msg = input.value;
-      if (msg) {
-        socket.emit('chat message', msg);
-        input.value = '';
-      }
+    // Nếu đã có username lưu, tự động chuyển vào chat
+    if (localStorage.getItem('chatUser')) {
+      window.location.href = '/chat.html';
     }
+
+    document.getElementById('login-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const name = document.getElementById('username').value.trim();
+      if (name) {
+        localStorage.setItem('chatUser', name);
+        window.location.href = '/chat.html';
+      }
+    });
   </script>
 </body>
 </html>
