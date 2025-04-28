@@ -1,0 +1,21 @@
+<!-- public/chatbot.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat với Bot</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Trò chuyện với AI Bot</h1>
+  <ul id="bot-messages"></ul>
+
+  <form id="bot-form">
+    <input id="bot-input" autocomplete="off" placeholder="Nhập tin nhắn..." />
+    <button type="submit">Gửi</button>
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="chatbot.js"></script>
+</body>
+</html>
