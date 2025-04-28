@@ -1,73 +1,75 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const http = require('http');
 const { Server } = require('socket.io');
 const cors = require('cors');
-const OpenAI = require('openai');  // ✅ Đổi lại OpenAI v4
-require('dotenv').config();
+const OpenAI = require('openai');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, {cors: {origin: '*'}});
+const io = new Server(server, { cors: { origin: '*' } });
 
-// 1) Phục vụ tệp tĩnh từ backend/public
+// Kiểm tra API Key
+if (!process.env.OPENAI_API_KEY) {
+  console.error('Lỗi: Chưa có OPENAI_API_KEY');
+  process.exit(1);
+}
+
+// Khởi tạo OpenAI client
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// Serve file tĩnh
 app.use(express.static(path.join(__dirname, 'backend', 'public')));
 
-// 2) Khi truy cập gốc '/', trả về index.html trong backend/public
+// Route mặc định
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'backend', 'public', 'index.html'));
 });
 
-// Health check
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
+// Health Check
+app.get('/health', (req, res) => res.send('OK'));
 
-// Namespace riêng cho chatbot
-const botNs = io.of('/chat/chatbot');
-
-botNs.on('connection', socket => {
-  console.log('User connected to bot:', socket.id);
-
-  socket.on('bot message', async (msg) => {
-    try {
-      const response = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are a helpful chatbot." },
-          { role: "user",   content: msg }
-        ]
-      });
-
-      const botReply = response.choices[0].message.content;
-
-      socket.emit('bot reply', botReply);
-    } catch (err) {
-      console.error('OpenAI Error:', err);
-      socket.emit('bot reply', "Xin lỗi, hiện tại bot đang bận. Hãy thử lại sau.");
-    }
-  });
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected from bot:', socket.id);
-  });
-});
-
-// Socket.IO chat người-đến-người
+// Chat nhóm
 io.on('connection', socket => {
-  console.log('Người dùng kết nối:', socket.id);
+  console.log('User kết nối:', socket.id);
 
   socket.on('chat message', ({ user, text }) => {
     io.emit('chat message', { user, text, time: Date.now() });
   });
 
   socket.on('disconnect', () => {
-    console.log('Người dùng ngắt kết nối:', socket.id);
+    console.log('User rời khỏi:', socket.id);
   });
 });
 
-// Khởi động server
-const PORT = process.env.PORT || 5000;
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on ${PORT}`);
+// ChatBot namespace
+const botNs = io.of('/chat/chatbot');
+
+botNs.on('connection', socket => {
+  console.log('User vào bot:', socket.id);
+
+  socket.on('bot message', async msg => {
+    try {
+      const response = await openai.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [
+          { role: 'system', content: 'Bạn là một trợ lý ảo thông minh.' },
+          { role: 'user', content: msg }
+        ]
+      });
+      socket.emit('bot reply', response.choices[0].message.content);
+    } catch (err) {
+      console.error('OpenAI lỗi:', err);
+      socket.emit('bot reply', 'Xin lỗi, bot đang bận. Hãy thử lại sau.');
+    }
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Bot user rời:', socket.id);
+  });
 });
+
+// Server chạy
+const PORT = process.env.PORT || 5000;
+server.listen(PORT, '0.0.0.0', () => console.log(`Server chạy ở cổng ${PORT}`));
