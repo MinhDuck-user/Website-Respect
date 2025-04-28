@@ -1,60 +1,66 @@
 body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    margin: 0; padding: 0;
-  }
-  .login-container, .chat-container {
-    max-width: 600px;
-    margin: 40px auto;
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-  }
-  .login-container h1, .chat-container header h1 {
-    margin: 0 0 20px;
-    text-align: center;
-  }
-  .login-container form,
-  .chat-container form {
-    display: flex;
-  }
-  .login-container input,
-  .chat-container input {
-    flex: 1;
-    padding: 10px;
-    font-size: 1rem;
-  }
-  .login-container button,
-  .chat-container button {
-    padding: 10px 20px;
-    background: #007BFF;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  #messages {
-    list-style: none;
-    padding: 0;
-    height: 300px;
-    overflow-y: auto;
-    margin-bottom: 10px;
-  }
-  #messages li {
-    padding: 8px;
-    border-bottom: 1px solid #eee;
-  }
-  .msg-user {
-    font-weight: bold;
-    margin-right: 6px;
-  }
-  .msg-time {
-    font-size: 0.8rem;
-    color: #888;
-    margin-left: 8px;
-  }
-  .chat-container header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
+  font-family: 'Arial', sans-serif;
+  background: #f7f7f7;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+#bot-messages {
+  list-style: none;
+  padding: 0;
+  margin: 20px auto;
+  max-width: 600px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  height: 400px;
+  overflow-y: auto;
+}
+
+#bot-messages li {
+  padding: 12px;
+  margin: 10px;
+  border-radius: 8px;
+  max-width: 75%;
+}
+
+#bot-messages li:nth-child(odd) {
+  background: #e6f7ff;
+  margin-left: auto;
+  text-align: right;
+}
+
+#bot-messages li:nth-child(even) {
+  background: #f1f1f1;
+  margin-right: auto;
+  text-align: left;
+}
+
+#bot-form {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+#bot-input {
+  width: 400px;
+  padding: 10px;
+  border-radius: 6px 0 0 6px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+#bot-form button {
+  padding: 10px 20px;
+  border: none;
+  background: #007BFF;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 0 6px 6px 0;
+}
