@@ -19,19 +19,8 @@
     </form>
   </div>
 
-  <button id="bot-btn">Chat với Bot</button>
-
-  <div id="bot-ui" style="display:none;">
-    <ul id="bot-messages"></ul>
-    <form id="bot-form">
-      <input id="bot-input" placeholder="Nhập vào bot..." autocomplete="off" />
-      <button type="submit">Gửi cho Bot</button>
-    </form>
-  </div>
+  <button onclick="window.location.href='/chat/chatbot.html'">Trò chuyện với ChatBot</button>
   
-  <div id="chat-ui">
-    <!-- UI chat người-đến-người hiện có -->
-  </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="client.js"></script>
